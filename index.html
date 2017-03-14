@@ -5,157 +5,154 @@
 
     <title>TABLERO</title>
 
-   
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="//lightswitch05.github.io/table-to-json/javascripts/jquery.tabletojson.min.js"></script>
+
 
     <script type="text/javascript">
-
-    $(document).ready(function(){
-
-        /**
-
-         * Funcion para añadir una nueva columna en la tabla
-
-         */
-
-        $("#add").click(function(){
-
-            // Obtenemos el numero de filas (td) que tiene la primera columna
-
-            // (tr) del id "tabla"
-
-            var tds=$("#tabla tr:first td").length;
-
-            // Obtenemos el total de columnas (tr) del id "tabla"
-
-            var trs=$("#tabla tr").length;
-
-            var nuevaFila="<tr>";
-
-            for(var i=0;i<tds;i++){
-
-                // añadimos las columnas
-
-                nuevaFila+="<td>columna "+(i+1)+" Añadida con jquery</td>";
-
-            }
-
-            // Añadimos una columna con el numero total de columnas.
-
-            // Añadimos uno al total, ya que cuando cargamos los valores para la
-
-            // columna, todavia no esta añadida
-
-            nuevaFila+="<td>"+(trs+1)+" columnas";
-
-            nuevaFila+="</tr>";
-
-            $("#tabla").append(nuevaFila);
-
-        });
-
- 
-
-        /**
-
-         * Funcion para eliminar la ultima columna de la tabla.
-
-         * Si unicamente queda una columna, esta no sera eliminada
-
-         */
-
-        $("#del").click(function(){
-
-            // Obtenemos el total de columnas (tr) del id "tabla"
-
-            var trs=$("#tabla tr").length;
-
-            if(trs>1)
-
-            {
-
-                // Eliminamos la ultima columna
-
-                $("#tabla tr:last").remove();
-
-            }
-
-        });
-
-    });
-
     </script>
 
- 
+
 
     <style>
-
-    #add, #del  {cursor:pointer;text-decoration:underline;color:#00f;}
-
+        #add,
+        #del {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #00f;
+        }
     </style>
 </head>
 
 <body>
+    <div id="app">
+      
 
-<div id="add">pulsa aquí para añadir una nueva fila desde jquery</div>
+        <table class="table table-condensed" v-cloak>
+            <thead>
+                <tr>
 
-<div id="del">pulsa aquí para eliminar la ultima fila desde jquery</div>
+                    <td>C1</td>
+                    <td>C2</td>
+                    <td>C3</td>
+                    <td>C4</td>
+                    <td>C5</td>
+                    <td>C6</td>
+                    <td>C7</td>
+                    <td>C8</td>
+                    <td>C9</td>
+                    <td>C10</td>
 
-<p>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in valu">
+                    <td>{{item.C1}}</td>
+                    <td>{{item.C2}}</td>
+                    <td>{{item.C3}}</td>
+                    <td>{{item.C4}}</td>
+                    <td>{{item.C5}}</td>
+                    <td>{{item.C6}}</td>
+                    <td>{{item.C7}}</td>
+                    <td>{{item.C8}}</td>
+                    <td>{{item.C9}}</td>
+                    <td>{{item.C10}}</td>
 
-    <table id="tabla" border=1>
+                </tr>
+            </tbody>
+        </table>
 
-        <tr>
+    </div>
+    <form action="">
 
-            <td>primera columma</td>
-
-            <td>segundo columna</td>
-
-            <!-- podemos añadir tantas columnas como deseemos -->
-
-            <!--<td>tercera columna</td>-->
-
-        </tr>
-
-    </table>
-
-</p>
+    </form>
 </body>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
 <script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            valu: []
+        },
+        mounted: function () {
+            var vm = this;
+            var socket = io();
+            socket.on('Cargar Datos', function (Valores) {
+                if (typeof Valores == "object") {
+                    console.log("fdsd");
+                    $('table').append(Valores);
 
+                    console.log('=>', Valores);
+                    vm.valu = Valores;
+                }
 
-    $(function () {
-        var socket = io();
-     
-
-socket.on('Cargar Datos', function(resultado){
-
-
-
-
-    $('#fila1').append($('<tr>').text(resultado),($('</tr>').append()));
-
-                 
- 
-    console.log(resultado);
-})
-
-
-        $('form').submit(function () {
-         //   socket.emit('chat message', $('#m').val());
-           // $('#m').val('');
-         
-            return false;
-        })
-        socket.on('chat message', function(mensaje){
-            $('#messages').append($('<li>').text(mensaje));
-        })
+            });
+        }
     })
 </script>
+
+<!--<script type="text/javascript">
+
+    $(document).ready(function () {
+
+  var socket = io();
+            socket.on('Cargar Datos', function (Valores) {
+                $('#men').append(Valores);
+
+
+
+
+       
+            //alert(JSON.stringify(Valores)); 
+            console.log(Valores);
+
+            $('#men').append(Valores);
+
+
+
+            console.log(Valores.length);
+            $('table').remove();
+
+
+            if (Valores != '') {
+                var i;
+                var valores = Valores;
+                var atributos = Array();
+
+                if (Valores.length > 0) {
+                    for (var aux in Valores[0])
+                        atributos.push(aux);
+                }
+                var tabla = $('<table class="table table-condensed"></table>');
+                var head = $('<tr></tr>').css('text-transform', 'capitalize');
+                for (i = 0; i < atributos.length; i++) {
+                    head.append('<th>' + atributos[i] + '</th>');
+                }
+                tabla.append($('<thead></thead>').append(head));
+
+                var tbody = $('<tbody></tbody>');
+                for (i = 0; i < Valores.length; i++) {
+                    var tr = $('<tr></tr>');
+                    for (j = 0; j < atributos.length; j++)
+                        tr.append('<td>' + eval('valores[i].' + atributos[j]) + '</td>');
+
+                    tbody.append(tr);
+                }
+                tabla.append(tbody);
+                $('body').append(tabla);
+            }
+
+        });
+    });
+</script>-->
 
 </html>

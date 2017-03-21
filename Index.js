@@ -35,20 +35,58 @@ io.on('connection', function (socket) {
         }
     });
 
+    function EncontrarAgente(agente) {
+        return new Promise((resolve, reject) => {
+            filaposicion = 0;
+            for (var fila = 1; fila < 4; fila++) {
+                posicion = 0;
+                for (var index = 1; index < 11; index++) {
+                    var query = connection.query('select C' + index + ', IdFilas from tablero where IdFilas=' + fila + ' and C' + index + ' IN (' + agente + ')', function (error, result) {
+                        posicion++;
+                        if (error) {
+                            throw error;
+                        } else {
+                            var resultado = result;
+                            if (resultado.length > 0) {
+                                filaposicion++;
+                                console.log(posicion, filaposicion);
+                                console.log();
+                                // return;
+                                return resolve(JSON.parse(JSON.stringify(result))[0]);
+                            } else {
+                                // console.log('Registro no encontrado');
+                            }
+                        }
+                    });
+                }
+            }
+        })
+
+    }
+
+    function MoverAgente1(movimiento) {
+        EncontrarAgente(1).then((result) => {
+
+
+        })
+
+    }
+
     function GenerarObstaculos() {
 
         var cont = 0;
         var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
-
+        //Borrar todos los obstaculos anteriores
         for (con2 = 3; con2 < 9; con2++) {
-     for (var index = 1; index < 4; index++) {
-        
-          var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
-     }
-           
+            for (var index = 1; index < 4; index++) {
+
+                var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
+            }
         }
 
-       for (con2 = 3; con2 < 9; con2++) {
+
+        //Generar obstaculos 
+        for (con2 = 3; con2 < 9; con2++) {
 
             cont2 = Math.floor(Math.random() * (4 - 1) + 1);
             while (cont == cont2) {
@@ -56,13 +94,8 @@ io.on('connection', function (socket) {
             }
             var query = connection.query('update tablero set C' + con2 + '=3 where IdFilas=' + cont2 + ' and C' + con2 + ' IN(0);');
             cont = cont2;
-            console.log('entra' + con2 + ' Valor en fila' + cont2);
-
         }
     };
-
-
-
 
     // hacer la consulta 
     function EnviarDatos() {
@@ -77,29 +110,26 @@ io.on('connection', function (socket) {
                         //  io.emit('Cargar Datos', valores.split(separador));
                     } else {
                         console.log('Registro no encontrado');
-
                     }
                 }
             });
         });
     };
-    EnviarDatos();
 
+    MoverAgente1();
+    //EncontrarAgente(2);
+    EnviarDatos();
     setInterval(() => {
         EnviarDatos();
     }, 1000);
 
     setInterval(() => {
+
         GenerarObstaculos();
     }, 3000);
+
+
 });
-
-
-
-
 http.listen(3000, function () {
     console.log('Corriendo en el puerto 3000');
-
-
-
 });

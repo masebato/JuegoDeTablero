@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
-
+var loug = require('loug');
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
@@ -18,11 +18,7 @@ io.on('connection', function (socket) {
     //establecer las variables para la conexion
     var connection = mysql.createConnection({
 
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'bdtablero',
-        port: 3306
+     
     });
 
     //conectar a la base de datos
@@ -34,42 +30,97 @@ io.on('connection', function (socket) {
             console.log('Conexion Correcta');
         }
     });
+    /**
+     * 
+     * @param {Number} fila Fila es la variable que viene del for para encontrar la Columna del registro
+     * @param {Number} index index es una variable la cual sirve para para encontrar la FILA del registro  
+     * @param {Number} agente agente es el agente que se está buscando en los registros
+     */
+    function ConsultarPosicion(fila, index, agente) {
+        return new Promise((resolve, reject) => {
+            var query = connection.query('select C' + fila + ', IdFilas from tablero where IdFilas=' + index + ' and C' + fila + ' IN (' + agente + ')', [], function (error, result) {
+                //  loug('resultado =>', result);
+                if (error) {
+                    // throw error;
+                    return reject(error);
+                } else {
+                    var resultado = result;
+                    if (resultado.length > 0) {
+                        // loug(fila, index);
+                        //   loug('fila',fila);
+                        //    loug(resultado);
+                        // return;
+                        //      prueeba1 = JSON.stringify(resultado);
+                        //    prueba = Object.keys(resultado);
 
+                        return resolve({
+                            Columna: fila,
+                            Fila: index
+                        });
+                    } else {
+                        //  return reject('registro no encontrado');
+                        // console.log('Registro no encontrado');
+                    }
+                }
+            });
+
+        })
+
+    }
+    /**
+     * 
+     * @param {Number} agente El agente que se esta buscando en la base de datos
+     */
     function EncontrarAgente(agente) {
         return new Promise((resolve, reject) => {
-            filaposicion = 0;
-            for (var fila = 1; fila < 4; fila++) {
+            for (var fila = 1; fila < 11; fila++) {
                 posicion = 0;
-                for (var index = 1; index < 11; index++) {
-                    var query = connection.query('select C' + index + ', IdFilas from tablero where IdFilas=' + fila + ' and C' + index + ' IN (' + agente + ')', function (error, result) {
-                        posicion++;
-                        if (error) {
-                            throw error;
-                        } else {
-                            var resultado = result;
-                            if (resultado.length > 0) {
-                                filaposicion++;
-                                console.log(posicion, filaposicion);
-                                console.log();
-                                // return;
-                                return resolve(JSON.parse(JSON.stringify(result))[0]);
-                            } else {
-                                // console.log('Registro no encontrado');
-                            }
-                        }
-                    });
+                for (var index = 1; index < 4; index++) {
+                    ConsultarPosicion(fila, index, agente).then(values => {
+                        return resolve(values);
+                    })
                 }
             }
+
         })
 
     }
 
-    function MoverAgente1(movimiento) {
-        EncontrarAgente(1).then((result) => {
+    function MoverAgente1() {
+        //traigo el movimiento del agente
+        var query = connection.query('select * from agente1', [], function (error, result) {
+            // Valido si trajo algo la base de datos
+            if (error) {
+                throw error;
+            } else {
+                var resultado = result;
+                if (resultado.length > 0) {
 
+                    var movi = JSON.parse(JSON.stringify(result))[0];
+                    console.log('movi==>', movi);
 
-        })
-
+                    //console.log('result2', result2);
+                    //   console.log(movi.Movimiento);
+                    EncontrarAgente(1).then(result2 => {
+                        if (movi.Movimiento == 2) {
+                            // loug(result2.Posicion, result2.Filaposicion);
+                            MoverColumna = result2.Columna + 1;
+                            MoverFila = result2.Fila - 1;
+                            if (MoverFila != 0 && MoverColumna != 10 && MoverColumna != 0) {
+                                // console.log(MoverColumna, MoverFila);
+                                var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
+                                var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
+                            } else {
+                                console.log('movimiento invalido');
+                            }
+                        }
+                    })
+                    // return;
+                } else {
+                    console.log('Registro no encontrado');
+                }
+            }
+        });
     }
 
     function GenerarObstaculos() {
@@ -83,7 +134,6 @@ io.on('connection', function (socket) {
                 var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
             }
         }
-
 
         //Generar obstaculos 
         for (con2 = 3; con2 < 9; con2++) {
@@ -117,7 +167,7 @@ io.on('connection', function (socket) {
     };
 
     MoverAgente1();
-    //EncontrarAgente(2);
+    //  EncontrarAgente(1);
     EnviarDatos();
     setInterval(() => {
         EnviarDatos();

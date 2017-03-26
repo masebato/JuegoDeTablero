@@ -67,12 +67,10 @@
             var vm = this; 
             var socket = io();
             socket.on('Cargar Datos', function (Valores) {
-                    console.log(Valores);
+                   
                     $('#mensaje').append(Valores);
                 if (typeof Valores == "object") {
-                    console.log("fdsd");
-                    
-                    console.log('=>', Valores);
+                  
                     vm.valu = Valores;
                 }
 
@@ -81,59 +79,5 @@
     })
 </script>
 
-<!--<script type="text/javascript">
-
-    $(document).ready(function () {
-
-  var socket = io();
-            socket.on('Cargar Datos', function (Valores) {
-                $('#men').append(Valores);
-
-
-
-
-       
-            //alert(JSON.stringify(Valores)); 
-            console.log(Valores);
-
-            $('#men').append(Valores);
-
-
-
-            console.log(Valores.length);
-            $('table').remove();
-
-
-            if (Valores != '') {
-                var i;
-                var valores = Valores;
-                var atributos = Array();
-
-                if (Valores.length > 0) {
-                    for (var aux in Valores[0])
-                        atributos.push(aux);
-                }
-                var tabla = $('<table class="table table-condensed"></table>');
-                var head = $('<tr></tr>').css('text-transform', 'capitalize');
-                for (i = 0; i < atributos.length; i++) {
-                    head.append('<th>' + atributos[i] + '</th>');
-                }
-                tabla.append($('<thead></thead>').append(head));
-
-                var tbody = $('<tbody></tbody>');
-                for (i = 0; i < Valores.length; i++) {
-                    var tr = $('<tr></tr>');
-                    for (j = 0; j < atributos.length; j++)
-                        tr.append('<td>' + eval('valores[i].' + atributos[j]) + '</td>');
-
-                    tbody.append(tr);
-                }
-                tabla.append(tbody);
-                $('body').append(tabla);
-            }
-
-        });
-    });
-</script>-->
 
 </html>

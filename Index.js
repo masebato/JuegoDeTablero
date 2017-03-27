@@ -1,8 +1,10 @@
 var app = require('express')();
+var express= require('express');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
 var loug = require('loug');
+app.use(express.static('Img'))
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
@@ -17,7 +19,13 @@ io.on('connection', function (socket) {
 
     //establecer las variables para la conexion
     var connection = mysql.createConnection({
-     
+        
+            
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'bdtablero',
+        port: 3306
 
     });
 
@@ -83,11 +91,14 @@ io.on('connection', function (socket) {
                         var estado = true;
                         if (resultado.length > 0) {
                             estado = false;
+                            loug('obstaculo encontrado');
                             return resolve(estado)
+
                         } else {
                             estado = true;
-                            return resolve(estado);
                             console.log('Obstaculo no encontrado');
+                            return resolve(estado);
+
                         }
                     }
 
@@ -124,10 +135,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -143,10 +154,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -161,10 +172,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1  set Movimiento =0');
                                     }
                                 });
                             }
@@ -172,15 +183,18 @@ io.on('connection', function (socket) {
                                 MoverColumna = result2.Columna + 1;
                                 MoverFila = result2.Fila + 1;
                                 var EstadoObstaculo;
+
                                 EncontrarObstaculo(MoverColumna, MoverFila).then(estado => {
+
                                     EstadoObstaculo = estado;
                                     loug(estado);
                                     if (MoverFila != 0 && MoverFila != 4 && MoverColumna != 10 && MoverColumna != 0 && estado == true) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                         console.log('movimiento invalido');
                                     }
                                 });
@@ -196,10 +210,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -214,10 +228,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -235,7 +249,7 @@ io.on('connection', function (socket) {
                                         var queryUpdate3 = connection.query('update agente1 set Movimiento =0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -250,10 +264,10 @@ io.on('connection', function (socket) {
 
                                         var queryUpdate1 = connection.query('update tablero set C' + MoverColumna + '=1  where IdFilas=' + MoverFila + '')
                                         var queryUpdate2 = connection.query('update tablero set C' + result2.Columna + '=0 where IdFilas=' + result2.Fila + '');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     } else {
                                         console.log('movimiento invalido');
-                                        var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                                        var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                                     }
                                 });
                             }
@@ -263,7 +277,7 @@ io.on('connection', function (socket) {
                     }
                     // return;
                 } else {
-                    var queryUpdate3 = connection.query('update agente1 movimiento =0');
+                    var queryUpdate3 = connection.query('update agente1 set Movimiento = 0');
                     //console.log('Registro no encontrado');
                 }
             }
@@ -444,50 +458,53 @@ io.on('connection', function (socket) {
     }
 
     function GenerarAgentes1() {
-        for (var con2 = 3; con2 < 9; con2++) {
+        for (var con2 = 1; con2 < 11; con2++) {
             for (var index = 1; index < 4; index++) {
-
                 var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(1);');
             }
         }
         var fil = Math.floor(Math.random() * (4 - 1) + 1);
-        var query = connection.query('update tablero set C2 =1 where IdFilas=' + fil + ';');
+        var query = connection.query('update tablero set C2 =1 where IdFilas=' + fil + '');
     };
 
     function GenerarAgentes2() {
-        for (var con2 = 3; con2 < 9; con2++) {
+        for (var con2 = 1; con2 < 11; con2++) {
             for (var index = 1; index < 4; index++) {
-
                 var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(2);');
             }
         }
         var fil = Math.floor(Math.random() * (4 - 1) + 1);
-        var query = connection.query('update tablero set C9=2 where IdFilas=' + fil + ';');
+        var query = connection.query('update tablero set C9=2 where IdFilas=' + fil + '');
 
     };
 
 
+
     function GenerarObstaculos() {
-        var cont = 0;
-        var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
-        //Borrar todos los obstaculos anteriores
-        for (con2 = 3; con2 < 9; con2++) {
-            for (var index = 1; index < 4; index++) {
+        return new Promise((resolve, reject) => {
+            var cont = 0;
+            var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
+            //Borrar todos los obstaculos anteriores
+            for (con2 = 3; con2 < 9; con2++) {
+                for (var index = 1; index < 4; index++) {
 
-                var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
+                    var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
+                }
             }
-        }
+            //Generar obstaculos 
+            for (con2 = 3; con2 < 9; con2++) {
 
-        //Generar obstaculos 
-        for (con2 = 3; con2 < 9; con2++) {
+                cont2 = Math.floor(Math.random() * (4 - 1) + 1);
+                while (cont == cont2) {
+                    cont2 = Math.floor(Math.random() * (3 - 1) + 1);
+                }
+                var query = connection.query('update tablero set C' + con2 + '=3 where IdFilas=' + cont2 + ' and C' + con2 + ' IN(0);');
+                cont = cont2;
 
-            cont2 = Math.floor(Math.random() * (4 - 1) + 1);
-            while (cont == cont2) {
-                cont2 = Math.floor(Math.random() * (3 - 1) + 1);
             }
-            var query = connection.query('update tablero set C' + con2 + '=3 where IdFilas=' + cont2 + ' and C' + con2 + ' IN(0);');
-            cont = cont2;
-        }
+            return resolve;
+        })
+
     };
 
     // hacer la consulta 
@@ -500,7 +517,6 @@ io.on('connection', function (socket) {
                     var resultado = result;
                     if (resultado.length > 0) {
                         io.emit('Cargar Datos', result);
-                        //  io.emit('Cargar Datos', valores.split(separador));
                     } else {
                         console.log('Registro no encontrado');
                     }
@@ -512,26 +528,26 @@ io.on('connection', function (socket) {
 
 
     GenerarAgentes1();
+
     GenerarAgentes2();
 
-    EnviarDatos();
     setInterval(() => {
         EnviarDatos();
-    }, 1000);
+    }, 3000);
 
     setInterval(() => {
 
         GenerarObstaculos();
-    }, 3000);
+    }, 2500);
     setInterval(() => {
 
         MoverAgente1();
-    }, 1000)
+    }, 2000);
 
     setInterval(() => {
 
         MoverAgente2();
-    }, 2000)
+    }, 2000);
 
 
 });

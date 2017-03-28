@@ -15,27 +15,27 @@
     <style>
         table {
             height: 500px;
-            width: 1520px;
+            width: 1500px;
+         
+            background-image: url('FondoTerminado.png');
+            
         }
 
         tr,
         td {
-            width: 900px;
+             
+            width: 80px; 
+            height: 50px;
+            
             text-align: center;
-            border: 1px solid aliceblue;
+          
         }
 
-        tr {
-            background-color: limegreen;
-        }
 
-        #a1,
-        #a10 {
-            background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/4b/F1-Bandera_a_cuadros.png);
-        }
 
+      
         img {
-            width: 50px;
+            width: 90px;
         }
     </style>
 </head>
@@ -45,70 +45,70 @@
         <div id="app">
             <table v-cloak>
 
-                <tbody>
-                    <tr v-for="item in valu">
+                <tbody >
+                    <tr v-for="item in valu" >
                         <td id="a1" v-if="item.C1==0">
-                           
+
                         </td>
-                        <td id="a1" v-if="item.C1==1">
+                        <td  id="a1" v-if="item.C1==1">
                             <img src="corredor2.gif">
                         </td>
-                        <td id="a1" v-if="item.C1==2">
+                        <td  id="a1" v-if="item.C1==2">
                             <img src="corredor1.gif">
                         </td>
                         <td id="a1" v-if="item.C1==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C2== 1">
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C2== 2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C2== 3">
-                             <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C2== 0">
-                          
+
                         </td>
                         <td v-if="item.C3==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C3==0">
-                          
+
                         </td>
                         <td v-if="item.C3==1">
-                              <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C3==2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C4==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C4==0">
-                           
+
                         </td>
                         <td v-if="item.C4==2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C4==1">
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C5==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C5==0">
-                         
+
                         </td>
                         <td v-if="item.C5==2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C5==1">
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C6==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C6==2">
                             <img src="corredor1.gif">
@@ -117,22 +117,22 @@
                             <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C6==0">
-                         
+
                         </td>
                         <td v-if="item.C7==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C7==2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C7==1">
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C7==0">
-                         
+
                         </td>
                         <td v-if="item.C8==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C8==2">
                             <img src="corredor1.gif">
@@ -140,35 +140,34 @@
                         </td>
                         <td v-if="item.C8==1">
 
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C8==0">
-                      
 
                         </td>
                         <td v-if="item.C9==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                         <td v-if="item.C9==2">
                             <img src="corredor1.gif">
                         </td>
                         <td v-if="item.C9==1">
-                             <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td v-if="item.C9==0">
-                          
+
                         </td>
                         <td id="a10" v-if="item.C10==1">
-                              <img src="corredor2.gif">
+                            <img src="corredor2.gif">
                         </td>
                         <td id="a10" v-if="item.C10==0">
-                          
+
                         </td>
                         <td id="a10" v-if="item.C10==2">
                             <img src="corredor1.gif">
                         </td>
                         <td id="a10" v-if="item.C10==3">
-                            <img src="piedra.jpg">
+                            <img src="piedra.png">
                         </td>
                     </tr>
                 </tbody>

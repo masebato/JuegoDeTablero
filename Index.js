@@ -1,5 +1,5 @@
 var app = require('express')();
-var express= require('express');
+var express = require('express');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
@@ -19,8 +19,8 @@ io.on('connection', function (socket) {
 
     //establecer las variables para la conexion
     var connection = mysql.createConnection({
-        
-            
+
+
         host: 'localhost',
         user: 'root',
         password: 'root',
@@ -478,32 +478,33 @@ io.on('connection', function (socket) {
 
     };
 
+    function BorrarObstaculos() {
+        var cont = 0;
+        var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
+        //Borrar todos los obstaculos anteriores
+        for (con2 = 3; con2 < 9; con2++) {
+            for (var index = 1; index < 4; index++) {
+                var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
+            }
+        }
+    }
 
 
     function GenerarObstaculos() {
-        return new Promise((resolve, reject) => {
-            var cont = 0;
-            var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
-            //Borrar todos los obstaculos anteriores
-            for (con2 = 3; con2 < 9; con2++) {
-                for (var index = 1; index < 4; index++) {
 
-                    var query = connection.query('update tablero set C' + con2 + '=0 where IdFilas=' + index + ' and C' + con2 + ' IN(3);');
-                }
+
+        //Generar obstaculos 
+        for (con2 = 3; con2 < 9; con2++) {
+
+             var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
+            while (cont == cont2) {
+                var cont2 = Math.floor(Math.random() * (3 - 1) + 1);
             }
-            //Generar obstaculos 
-            for (con2 = 3; con2 < 9; con2++) {
+            var query = connection.query('update tablero set C' + con2 + '=3 where IdFilas=' + cont2 + ' and C' + con2 + ' IN(0);');
+            var cont = cont2;
 
-                cont2 = Math.floor(Math.random() * (4 - 1) + 1);
-                while (cont == cont2) {
-                    cont2 = Math.floor(Math.random() * (3 - 1) + 1);
-                }
-                var query = connection.query('update tablero set C' + con2 + '=3 where IdFilas=' + cont2 + ' and C' + con2 + ' IN(0);');
-                cont = cont2;
+        }
 
-            }
-            return resolve;
-        })
 
     };
 
@@ -536,7 +537,7 @@ io.on('connection', function (socket) {
     }, 3000);
 
     setInterval(() => {
-
+        BorrarObstaculos();
         GenerarObstaculos();
     }, 2500);
     setInterval(() => {

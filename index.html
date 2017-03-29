@@ -16,24 +16,22 @@
         table {
             height: 500px;
             width: 1500px;
-         
+
             background-image: url('FondoTerminado.png');
-            
         }
 
         tr,
         td {
-             
-            width: 80px; 
+
+            width: 80px;
             height: 50px;
-            
+
             text-align: center;
-          
         }
 
 
 
-      
+
         img {
             width: 90px;
         }
@@ -45,15 +43,15 @@
         <div id="app">
             <table v-cloak>
 
-                <tbody >
-                    <tr v-for="item in valu" >
+                <tbody>
+                    <tr v-for="item in valu">
                         <td id="a1" v-if="item.C1==0">
 
                         </td>
-                        <td  id="a1" v-if="item.C1==1">
+                        <td id="a1" v-if="item.C1==1">
                             <img src="corredor2.gif">
                         </td>
-                        <td  id="a1" v-if="item.C1==2">
+                        <td id="a1" v-if="item.C1==2">
                             <img src="corredor1.gif">
                         </td>
                         <td id="a1" v-if="item.C1==3">
@@ -172,7 +170,9 @@
                     </tr>
                 </tbody>
             </table>
-            <button>Restablecer</button>
+           
+            <input type="button" name="" id="iniciar" value="Iniciar" onclick="Iniciar()" />
+            <input type="button" name="" id="Detener" value="Detener" onclick="Detencion()" />
         </div>
 
         <div id="mensaje"></div>
@@ -210,6 +210,16 @@
 </script>
 <script>
 </script>
+<script>
+    function Iniciar() {
+        var socket = io();
+        socket.emit("estado", 1);
+    };
 
+    function Detencion() {
+        var socket = io();
+        socket.emit("estado", 2);
+    };
+</script>
 
 </html>

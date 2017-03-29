@@ -122,7 +122,6 @@ io.on('connection', function (socket) {
                         // encuentro en que posicion esta el agente
                         EncontrarAgente(1).then(result2 => {
                             if (movi.Movimiento == 1) {
-
                                 var MoverColumna = result2.Columna;
                                 var MoverFila = result2.Fila - 1;
                                 var EstadoObstaculo;
@@ -492,11 +491,10 @@ io.on('connection', function (socket) {
 
     function GenerarObstaculos() {
 
-
         //Generar obstaculos 
         for (con2 = 3; con2 < 9; con2++) {
 
-             var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
+            var cont2 = Math.floor(Math.random() * (4 - 1) + 1);
             while (cont == cont2) {
                 var cont2 = Math.floor(Math.random() * (3 - 1) + 1);
             }
@@ -526,29 +524,60 @@ io.on('connection', function (socket) {
         });
     };
 
+    function iniciar() {
+        var query = connection.query('update estados set estado=1');
+        GenerarAgentes1();
+        GenerarAgentes2();
+    };
 
+    function detener() {
+        var query = connection.query('update estados set estado=2');
+    };
 
-    GenerarAgentes1();
+    socket.on('estado', function (data) {
 
-    GenerarAgentes2();
+        if (data == 1) {
+            iniciar();
+            console.log("Iniciado");
+        } else {
+            if (data == 2) {
+                console.log("Detener");
+                detener();
+            }
+        }
+
+    });
 
     setInterval(() => {
-        EnviarDatos();
-    }, 3000);
 
-    setInterval(() => {
-        BorrarObstaculos();
-        GenerarObstaculos();
-    }, 2500);
-    setInterval(() => {
+        var query = connection.query('SELECT * from estados;', [], function (error, result) {
+            if (error) {
+                throw error;
+            } else {
+                for (var i = 0; i < result.length; i++) {
+                    var resultado = result[i];
+                    if (resultado.estado == 1) {
 
-        MoverAgente1();
+                        MoverAgente1();
+                        MoverAgente2();
+                        BorrarObstaculos();
+                        
+                        GenerarObstaculos();
+
+                        EnviarDatos();
+
+                        console.log(resultado);
+                    } else {
+
+                        console.log("estado =0");
+
+                    }
+                }
+            }
+        })
+
     }, 2000);
 
-    setInterval(() => {
-
-        MoverAgente2();
-    }, 2000);
 
 
 });

@@ -11,25 +11,74 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="//lightswitch05.github.io/table-to-json/javascripts/jquery.tabletojson.min.js"></script>
 
+<script>
+    var socket = io();
+    socket.on('Ganador', function (datoo) {
+                console.log(datoo);
+                document.getElementById("ganador").innerHTML = "";
+                if (datoo === 1) {
+                    var h1 = document.createElement("div");
+                    h1.className = "imagen1";
+                    var win = document.createElement("div");
+                    win.className = "wing";
+                    win.innerHTML = "Agente 1";
+                    h1.appendChild(win);
+                    document.getElementById("ganador").appendChild(h1);
 
+                } else {
+                    var h1 = document.createElement("div");
+                    h1.className = "imagen2";
+                    var win = document.createElement("div");
+                    win.className = "wing";
+                    win.innerHTML = "Agente 2";
+                    h1.appendChild(win);
+                    document.getElementById("ganador").appendChild(h1);
+
+                }
+    });
+</script>
     <style>
         table {
             height: 500px;
             width: 1500px;
             background-image: url('FondoTerminado.png');
         }
-        
+
         tr,
         td {
-        
+
             width: 80px;
             height: 50px;
             text-align: center;
         }
-        
+
         img {
             width: 100px;
         }
+        .imagen1 {
+            background-image: url("win.png");
+            width: 300px;
+            height: 220px;
+        }
+        .imagen2 {
+            background-image: url("win.png");
+                        width: 300px;
+            height: 220px;
+        }
+        #ganador{
+            width: 20%;
+            background-color: transparent;
+            position: absolute;
+            z-index: 5;
+            margin-top: 10px;
+            margin-left: 40%;
+        }
+        .win{
+            margin-bottom: 0px;
+            margin: auto;
+            font-size: 20px;
+            background-color: red;
+        }   
     </style>
 </head>
 
@@ -164,6 +213,7 @@
                         </td>
                     </tr>
                 </tbody>
+                <div id="ganador"></div>
             </table>
 
             <input type="button" name="" id="iniciar" value="Iniciar" onclick="Iniciar()" />
@@ -216,5 +266,8 @@
         socket.emit("estado", 2);
     };
 </script>
+
+
+
 
 </html>
